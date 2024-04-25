@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <meta charset="utf-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@200..800&display=swap"
+        rel="stylesheet">
+    <title>Les petits plats</title>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="index.html"><img class="header_logo" src="/assets/logo/Logo.png" height="25"
+                    alt="Les petits plats"></a>
+            <h1 class="header_title">Cherchez parmi plus de 1500 recettes <br>du quotidien, simples et délicieuses</h1>
+            <form id="form" class="searchbar">
+                <input type="search" id="searchInput" name="search"
+                    placeholder="Rechercher une recette, un ingrédient" />
+                <button type="submit" class="search_button" id="searchButton">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="dropdown_container">
+                <div id="dropdownSelectIngredients" class="dropdown">
+                    <div class="dropdown_header">
+                        <button class="dropdown_button" type="button" aria-haspopup="true" aria-expanded="false"><span
+                                class="dropdown_button_title" id="dropdownIngredient">Ingrédients</span>
+                            <span class="fa-solid fa-chevron-up" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="dropdown_content">
+                        <form id="searchIngredient" class="dropdown_search">
+                            <input class="dropdown_input" id="searchInputIngredient" name="search" tabindex="-1"
+                                type="text" maxlength="12">
+                            <button class="dropdown_input_button" type="submit" id="searchButtonIngredient"
+                                tabindex="-1"> <i class="fa-solid fa-magnifying-glass"></i></button>
+
+                        </form>
+                        <ul class="dropdown_listbox" id="listboxIngredient" role="listbox" tabindex="-1"
+                            aria-labelledby="sortButton">
+
+                        </ul>
+                    </div>
+                </div>
+                <div id="dropdownSelectAppliances" class="dropdown">
+                    <div class="dropdown_header">
+                        <button class="dropdown_button" type="button" aria-haspopup="true" aria-expanded="false"><span
+                                class="dropdown_button_title" id="dropdownAppliances">Appareils</span>
+                            <span class="fa-solid fa-chevron-up" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="dropdown_content">
+                        <form id="searchAppliance" class="dropdown_search">
+                            <input class="dropdown_input" id="searchInputAppliance" name="search" tabindex="-1"
+                                type="text" maxlength="12">
+                            <button class="dropdown_input_button" type="submit" id="searchButtonAppliance"
+                                tabindex="-1"> <i class="fa-solid fa-magnifying-glass"></i></button>
+
+                        </form>
+                        <ul class="dropdown_listbox" id="listboxAppliance" role="listbox" tabindex="-1"
+                            aria-labelledby="sortButton">
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div id="dropdownSelectUstensils" class="dropdown">
+                    <div class="dropdown_header">
+                        <button class="dropdown_button" type="button" aria-haspopup="true" aria-expanded="false"><span
+                                class="dropdown_button_title" id="dropdownUstensils">Ustensibles</span>
+                            <span class="fa-solid fa-chevron-up" aria-hidden="true"></span>
+                        </button>
+                    </div>
+                    <div class="dropdown_content">
+                        <form id="searchUstensil" class="dropdown_search">
+                            <input class="dropdown_input" id="searchInputUstensil" name="search" tabindex="-1"
+                                type="text" maxlength="12">
+                            <button class="dropdown_input_button" type="submit" id="searchButtonUstensil" tabindex="-1">
+                                <i class="fa-solid fa-magnifying-glass"></i></button>
+
+                        </form>
+                        <ul class="dropdown_listbox" id="listboxUstensil" role="listbox" tabindex="-1"
+                            aria-labelledby="sortButton">
+                        </ul>
+                    </div>
+                </div>
+                <span class="dropdown_badge" id="recipeCountBadge">
+                </span>
+            </section>
+
+            <section class="section_tag" id="sectionTag">
+
+            </section>
+
+
+
+
+            <section class="section_card" id="sectionCard">
+            </section>
+        </div>
+    </main>
+
+    <footer></footer>
+
+
+
+    <script src="index.js" type="module"></script>
+    <script src="https://kit.fontawesome.com/a8a9b95856.js" crossorigin="anonymous"></script>
+</body>
+
+</html>
