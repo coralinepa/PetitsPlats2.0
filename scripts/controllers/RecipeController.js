@@ -31,6 +31,13 @@ function getAppliances(recipes) {
   }, []);
 }
 
+function getFilteredOptions(query, options) {
+  const normalizedQuery = query.toLowerCase();
+  return options.filter((option) => {
+    return option.toLowerCase().includes(normalizedQuery);
+  });
+}
+
 class RecipeController {
   constructor(
     model,
@@ -60,132 +67,47 @@ class RecipeController {
       this.handleSearchIngredients.bind(this)
     );
 
-    this.dropdownIngredientsView.bindSelectHandler(
-      this.handleSelectIngredients.bind(this)
-    );
     this.dropdownAppliancesView.bindSearchHandler(
       this.handleSearchAppliances.bind(this)
-    );
-    this.dropdownAppliancesView.bindSelectHandler(
-      this.handleSelectAppliances.bind(this)
     );
 
     this.dropdownUstensilsView.bindSearchHandler(
       this.handleSearchUstensils.bind(this)
     );
-    this.dropdownUstensilsView.bindSelectHandler(
-      this.handleSelectUstensils.bind(this)
-    );
 
     const recipes = this.model.data;
-    this.appliances = getAppliances(recipes);
-    this.ustensils = getUstensils(recipes);
-    this.ingredients = getIngredients(recipes);
+
     this.view.updateCount(recipes.length);
 
-    this.view.displayRecipes(recipes);
-    this.dropdownIngredientsView.displayIngredients(this.ingredients);
-    this.dropdownAppliancesView.displayAppliances(this.appliances);
-    this.dropdownUstensilsView.displayUstensils(this.ustensils);
+    this.initializeRecipeFilters(recipes);
   }
 
-  searchIngredients(query) {
-    const normalizedQuery = query.toLowerCase();
-    this.ingredients = this.ingredients.filter((ingredient) => {
-      return ingredient.toLowerCase().includes(normalizedQuery);
-    });
-
-    this.dropdownIngredientsView.displayIngredients(this.ingredients);
-  }
-
-  handleSelectIngredients(event) {
-    console.log(event.target.dataset.value);
-    const tag = event.target.dataset.value;
+  handleSelect(tag) {
     this.tagsView.addToTags(tag);
     this.tagsView.bindRemoveHandler(this.handleRemoveHandler.bind(this));
     this.selectedTags = [...this.selectedTags, tag];
     const recipes = this.model.searchRecipesByTags(this.selectedTags);
     this.view.updateCount(recipes.length);
 
-    this.view.displayRecipes(recipes);
-    this.ustensils = getUstensils(recipes);
-    this.ingredients = getIngredients(recipes);
-    this.appliances = getAppliances(recipes);
-
-    this.dropdownIngredientsView.displayIngredients(this.ingredients);
-    this.dropdownAppliancesView.displayAppliances(this.appliances);
-    this.dropdownUstensilsView.displayUstensils(this.ustensils);
-  }
-
-  handleSelectUstensils(event) {
-    console.log(event.target.dataset.value);
-    const tag = event.target.dataset.value;
-    this.tagsView.addToTags(tag);
-    this.tagsView.bindRemoveHandler(this.handleRemoveHandler.bind(this));
-    this.selectedTags = [...this.selectedTags, tag];
-    const recipes = this.model.searchRecipesByTags(this.selectedTags);
-    this.view.updateCount(recipes.length);
-
-    this.view.displayRecipes(recipes);
-    this.ustensils = getUstensils(recipes);
-    this.ingredients = getIngredients(recipes);
-    this.appliances = getAppliances(recipes);
-
-    this.dropdownIngredientsView.displayIngredients(this.ingredients);
-    this.dropdownAppliancesView.displayAppliances(this.appliances);
-    this.dropdownUstensilsView.displayUstensils(this.ustensils);
-  }
-
-  handleSelectAppliances(event) {
-    console.log(event.target.dataset.value);
-    const tag = event.target.dataset.value;
-    this.tagsView.addToTags(tag);
-    this.tagsView.bindRemoveHandler(this.handleRemoveHandler.bind(this));
-    this.selectedTags = [...this.selectedTags, tag];
-    const recipes = this.model.searchRecipesByTags(this.selectedTags);
-    this.view.updateCount(recipes.length);
-
-    this.view.displayRecipes(recipes);
-    this.ustensils = getUstensils(recipes);
-    this.ingredients = getIngredients(recipes);
-    this.appliances = getAppliances(recipes);
-
-    this.dropdownIngredientsView.displayIngredients(this.ingredients);
-    this.dropdownAppliancesView.displayAppliances(this.appliances);
-    this.dropdownUstensilsView.displayUstensils(this.ustensils);
-  }
-
-  searchAppliances(query) {
-    const normalizedQuery = query.toLowerCase();
-    this.appliances = this.appliances.filter((appliance) => {
-      return appliance.toLowerCase().includes(normalizedQuery);
-    });
-
-    this.dropdownAppliancesView.displayAppliances(this.appliances);
-  }
-
-  searchUstensils(query) {
-    const normalizedQuery = query.toLowerCase();
-    this.ustensils = this.ustensils.filter((ustensil) => {
-      return ustensil.toLowerCase().includes(normalizedQuery);
-    });
-
-    this.dropdownUstensilsView.displayUstensils(this.ustensils);
+    this.initializeRecipeFilters(recipes);
   }
 
   handleSearchIngredients(event) {
-    console.log(event.target.value);
-    this.searchIngredients(event.target.value);
+    this.dropdownIngredientsView.displayOptions(
+      getFilteredOptions(event.target.value, this.ingredients)
+    );
   }
 
   handleSearchAppliances(event) {
-    console.log(event.target.value);
-    this.searchAppliances(event.target.value);
+    this.dropdownUstensilsView.displayOptions(
+      getFilteredOptions(event.target.value, this.appliances)
+    );
   }
 
   handleSearchUstensils(event) {
-    console.log(event.target.value);
-    this.searchUstensils(event.target.value);
+    this.dropdownUstensilsView.displayOptions(
+      getFilteredOptions(event.target.value, this.ustensils)
+    );
   }
 
   handleRemoveHandler(event) {
@@ -198,14 +120,7 @@ class RecipeController {
     const recipes = this.model.searchRecipesByTags(this.selectedTags);
     this.view.updateCount(recipes.length);
 
-    this.view.displayRecipes(recipes);
-    this.ustensils = getUstensils(recipes);
-    this.ingredients = getIngredients(recipes);
-    this.appliances = getAppliances(recipes);
-
-    this.dropdownIngredientsView.displayIngredients(this.ingredients);
-    this.dropdownAppliancesView.displayAppliances(this.appliances);
-    this.dropdownUstensilsView.displayUstensils(this.ustensils);
+    this.initializeRecipeFilters(recipes);
   }
 
   handleSearch(event) {
@@ -217,15 +132,33 @@ class RecipeController {
       const recipes = this.model.searchRecipes(query);
       this.view.updateCount(recipes.length);
 
-      this.view.displayRecipes(recipes);
-      this.ustensils = getUstensils(recipes);
-      this.ingredients = getIngredients(recipes);
-      this.appliances = getAppliances(recipes);
-
-      this.dropdownIngredientsView.displayIngredients(this.ingredients);
-      this.dropdownAppliancesView.displayAppliances(this.appliances);
-      this.dropdownUstensilsView.displayUstensils(this.ustensils);
+      this.initializeRecipeFilters(recipes);
     }
+  }
+
+  initializeRecipeFilters(recipes) {
+    this.view.displayRecipes(recipes);
+    this.ustensils = getUstensils(recipes);
+    this.ingredients = getIngredients(recipes);
+    this.appliances = getAppliances(recipes);
+
+    this.dropdownIngredientsView.displayOptions(
+      this.ingredients,
+      this.selectedTags
+    );
+    this.dropdownIngredientsView.bindSelectHandler(
+      this.handleSelect.bind(this)
+    );
+    this.dropdownAppliancesView.displayOptions(
+      this.appliances,
+      this.selectedTags
+    );
+    this.dropdownAppliancesView.bindSelectHandler(this.handleSelect.bind(this));
+    this.dropdownUstensilsView.displayOptions(
+      this.ustensils,
+      this.selectedTags
+    );
+    this.dropdownUstensilsView.bindSelectHandler(this.handleSelect.bind(this));
   }
 }
 

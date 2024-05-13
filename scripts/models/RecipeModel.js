@@ -20,8 +20,6 @@ class RecipeModel {
     return this.filteredRecipes;
   }
 
-  
-
   searchRecipesByTags(tags) {
     this.filteredRecipes = this.data.filter((recipe) => {
       const recipesTags = [

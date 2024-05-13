@@ -4,7 +4,6 @@ class TagsView {
   }
 
   addToTags(tag) {
-    console.log(tag);
     const html = `
       <div class="tag">
           ${tag}
