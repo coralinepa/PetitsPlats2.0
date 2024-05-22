@@ -14,7 +14,7 @@ class RecipeModel {
   }
 
   // Méthode pour rechercher des recettes en fonction d'un critère de recherche
-  searchRecipes(query) {
+  /* searchRecipes(query) {
     //La requête query est convertie en minuscules pour permettre une recherche insensible à la casse.
     const normalizedQuery = normalizeString(query);
     //Utilisation de la méthode filter pour créer un nouveau tableau filteredRecipes contenant uniquement les recettes qui correspondent à la requête. La méthode filter parcourt chaque élément de this.data et applique une fonction de filtrage.
@@ -33,6 +33,53 @@ class RecipeModel {
       );
     });
     //retourne le tableau des recettes filtrées
+    return this.filteredRecipes;
+  } */
+
+  // La fonction searchRecipes permet de filtrer des recettes en fonction d'une requête utilisateur en vérifiant si cette requête est présente dans le nom de la recette, ses ingrédients ou sa description. La recherche est insensible à la casse et s'arrête dès qu'un critère est rempli pour une recette donnée.
+  searchRecipes(query) {
+    //convertit la requête en minuscule
+    const normalizedQuery = query.toLowerCase();
+    // un tableau est initialisé pour stocker les recettes qui correspondent à la requête
+    let filteredRecipes = [];
+
+    //la boucle for parcourt toutes les recettes dans this.data. Pour chaque recette, une variable isMatch est initialisée à false pour indiquer si la recette correspond à la requête.
+    for (let i = 0; i < this.data.length; i++) {
+      const recipe = this.data[i];
+      let isMatch = false;
+
+      // Vérifier si le nom de la recette contient la requête, isMatch passe à true
+      if (recipe.name.toLowerCase().includes(normalizedQuery)) {
+        isMatch = true;
+      }
+
+      // Si isMatch est toujours false, la recherche continue sur les ingrédients de la recette. Une boucle for interne parcourt les ingrédients. Si un ingrédient contient la requête, isMatch est mis à true et la boucle est interrompue avec break.
+      if (!isMatch) {
+        for (let j = 0; j < recipe.ingredients.length; j++) {
+          const ingredient = recipe.ingredients[j];
+          if (ingredient.ingredient.toLowerCase().includes(normalizedQuery)) {
+            isMatch = true;
+            break; // Arrêter la boucle dès qu'on trouve un ingrédient correspondant
+          }
+        }
+      }
+
+      // Si isMatch est encore false, la description de la recette est vérifiée. Si elle contient la requête, isMatch est mis à true.
+      if (
+        !isMatch &&
+        recipe.description.toLowerCase().includes(normalizedQuery)
+      ) {
+        isMatch = true;
+      }
+
+      // Si isMatch est true après toutes les vérifications, la recette est ajoutée au tableau filteredRecipes.
+      if (isMatch) {
+        filteredRecipes.push(recipe);
+      }
+    }
+
+    //La propriété filteredRecipes de l'objet est mise à jour avec les recettes correspondant à la requête, et cette liste est retournée.
+    this.filteredRecipes = filteredRecipes;
     return this.filteredRecipes;
   }
 
