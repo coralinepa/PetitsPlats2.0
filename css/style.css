@@ -203,6 +203,7 @@ button {
   margin-left: 16px;
   display: flex;
   align-items: center;
+  margin-top: 16px;
 }
 
 .dropdown_input {

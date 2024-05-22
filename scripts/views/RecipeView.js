@@ -1,14 +1,21 @@
+// gère l'affichage des recettes et les interactions avec le formulaire de recherche
 class RecipeView {
   constructor() {
+    //this.recipesContainer est l'élément DOM qui contiendra les cartes des recettes, identifié par sectionCard.
     this.recipesContainer = document.getElementById("sectionCard");
+    //this.form est le formulaire de recherche, identifié par form.
     this.form = document.getElementById("form");
+    //this.recipeCountBadge est l'élément DOM qui affiche le nombre de recettes, identifié par recipeCountBadge.
     this.recipeCountBadge = document.getElementById("recipeCountBadge");
   }
 
+  //Met à jour le texte de this.recipeCountBadge pour afficher le nombre de recettes.
   updateCount(count) {
     this.recipeCountBadge.textContent = `${count} recettes`;
   }
-
+  //cette méthode affiche les recettes dans "this.recipeContainer"
+  //si le tableau recipes contient des éléments, elle génère html pour chaque recette
+  //Si le tableau recipes est vide, un message "pas de résultat" est affiché.
   displayRecipes(recipes) {
     if (recipes.length > 0) {
       const html = recipes
@@ -71,6 +78,8 @@ class RecipeView {
     }
   }
 
+  //Cette méthode lie un gestionnaire d'événements handler à l'événement submit du formulaire de recherche.
+  // Quand le formulaire est soumis, le gestionnaire d'événements spécifié est appelé.
   bindSearchHandler(handler) {
     this.form.addEventListener("submit", handler);
   }

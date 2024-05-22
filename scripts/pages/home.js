@@ -4,6 +4,7 @@ import RecipeModel from "../models/RecipeModel.js";
 import DropdownView from "../views/DropdownView.js";
 import TagsView from "../views/TagsView.js";
 
+//  Récupération des données de recettes depuis un fichier JSON.
 async function getRecipes() {
   try {
     const response = await fetch("data/recipes.json");
@@ -14,6 +15,7 @@ async function getRecipes() {
   }
 }
 
+// Initialisation des modèles et vues, puis création du contrôleur pour coordonner le tout.
 async function renderHome() {
   const RecipesData = await getRecipes();
 
