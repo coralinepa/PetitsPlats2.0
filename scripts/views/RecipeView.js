@@ -1,3 +1,12 @@
+function debounce(func, wait) {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+}
+
 // gère l'affichage des recettes et les interactions avec le formulaire de recherche
 class RecipeView {
   constructor() {
@@ -7,6 +16,8 @@ class RecipeView {
     this.form = document.getElementById("form");
     //this.recipeCountBadge est l'élément DOM qui affiche le nombre de recettes, identifié par recipeCountBadge.
     this.recipeCountBadge = document.getElementById("recipeCountBadge");
+
+    this.searchInput = document.getElementById("searchInput");
   }
 
   //Met à jour le texte de this.recipeCountBadge pour afficher le nombre de recettes.
@@ -80,8 +91,14 @@ class RecipeView {
 
   //Cette méthode lie un gestionnaire d'événements handler à l'événement submit du formulaire de recherche.
   // Quand le formulaire est soumis, le gestionnaire d'événements spécifié est appelé.
-  bindSearchHandler(handler) {
+  bindSubmitHandler(handler) {
     this.form.addEventListener("submit", handler);
+  }
+
+  //Cette méthode lie un gestionnaire d'événements à un champ de saisie (input) avec une fonction de debounce pour améliorer les performances en réduisant le nombre d'appels de la fonction de gestion des changements
+  bindChangeHandler(handler) {
+    const debouncedSearch = debounce(handler, 300);
+    this.searchInput.addEventListener("input", debouncedSearch);
   }
 }
 

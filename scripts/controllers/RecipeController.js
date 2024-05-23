@@ -71,17 +71,31 @@ class RecipeController {
     this.tagsView = tagsView;
 
     // Lier la méthode search à la vue
-    this.view.bindSearchHandler(this.handleSearch.bind(this));
+    this.view.bindSubmitHandler(this.handleSubmit.bind(this));
+    this.view.bindChangeHandler(this.handleChange.bind(this));
+
     this.dropdownIngredientsView.bindSearchHandler(
       this.handleSearchIngredients.bind(this)
+    );
+
+    this.dropdownIngredientsView.bindSelectHandler(
+      this.handleSelectTag.bind(this)
     );
 
     this.dropdownAppliancesView.bindSearchHandler(
       this.handleSearchAppliances.bind(this)
     );
 
+    this.dropdownAppliancesView.bindSelectHandler(
+      this.handleSelectTag.bind(this)
+    );
+
     this.dropdownUstensilsView.bindSearchHandler(
       this.handleSearchUstensils.bind(this)
+    );
+
+    this.dropdownUstensilsView.bindSelectHandler(
+      this.handleSelectTag.bind(this)
     );
 
     const recipes = this.model.data;
@@ -94,14 +108,16 @@ class RecipeController {
   //Ajoute un tag à la vue des tags et lie le gestionnaire de suppression.
   //Met à jour la liste des tags sélectionnés et filtre les recettes en conséquence.
   //Met à jour le nombre de recettes et les filtres de recettes.
-  handleSelect(tag) {
-    this.tagsView.addToTags(tag);
-    this.tagsView.bindRemoveHandler(this.handleRemoveHandler.bind(this));
-    this.selectedTags = [...this.selectedTags, tag];
-    const recipes = this.model.searchRecipesByTags(this.selectedTags);
-    this.view.updateCount(recipes.length);
+  handleSelectTag(tag) {
+    if (!this.selectedTags.includes(tag)) {
+      this.tagsView.addToTags(tag);
+      this.tagsView.bindRemoveHandler(this.handleRemoveHandler.bind(this));
+      this.selectedTags = [...this.selectedTags, tag];
+      const recipes = this.model.searchRecipesByTags(this.selectedTags);
+      this.view.updateCount(recipes.length);
 
-    this.initializeRecipeFilters(recipes);
+      this.initializeRecipeFilters(recipes);
+    }
   }
 
   //Filtre et affiche les options d'ingrédients en fonction de la recherche de l'utilisateur.
@@ -113,7 +129,7 @@ class RecipeController {
 
   //Filtre et affiche les options d'appareils en fonction de la recherche de l'utilisateur.
   handleSearchAppliances(event) {
-    this.dropdownUstensilsView.displayOptions(
+    this.dropdownAppliancesView.displayOptions(
       getFilteredOptions(event.target.value, this.appliances)
     );
   }
@@ -142,7 +158,7 @@ class RecipeController {
 
   //Gère la soumission du formulaire de recherche.
   //Si le formulaire est valide, recherche les recettes et met à jour les filtres.
-  handleSearch(event) {
+  handleSubmit(event) {
     event.preventDefault();
     const data = new FormData(event.srcElement);
 
@@ -154,6 +170,23 @@ class RecipeController {
       this.initializeRecipeFilters(recipes);
     }
   }
+  //gestionnaire d'événements pour un champ de saisie (input). Elle réagit aux changements dans ce champ (par exemple, lorsque l'utilisateur tape quelque chose).
+  handleChange(event) {
+    //event.target représente l'élément qui a déclenché l'événement (dans ce cas, le champ de saisie).
+    // event.target.value obtient la valeur actuelle du champ de saisie.
+    // Cette valeur est stockée dans la variable query.
+    const query = event.target.value;
+    // Condition sur la Longueur de la Chaîne
+    if (query.length > 3 || query.length === 0) {
+      //Recherche des Recettes
+      const recipes = this.model.searchRecipes(query);
+      //Mise à Jour des résultats
+      this.view.updateCount(recipes.length);
+      // initialisation des Filtres de Recettes
+      this.initializeRecipeFilters(recipes);
+    }
+  }
+
   //Met à jour les vues avec les recettes et initialise les filtres pour les ingrédients, appareils et ustensiles.
   //Lie les gestionnaires de sélection pour les vues dropdown.
   initializeRecipeFilters(recipes) {
@@ -166,19 +199,16 @@ class RecipeController {
       this.ingredients,
       this.selectedTags
     );
-    this.dropdownIngredientsView.bindSelectHandler(
-      this.handleSelect.bind(this)
-    );
+
     this.dropdownAppliancesView.displayOptions(
       this.appliances,
       this.selectedTags
     );
-    this.dropdownAppliancesView.bindSelectHandler(this.handleSelect.bind(this));
+
     this.dropdownUstensilsView.displayOptions(
       this.ustensils,
       this.selectedTags
     );
-    this.dropdownUstensilsView.bindSelectHandler(this.handleSelect.bind(this));
   }
 }
 

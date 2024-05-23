@@ -1,3 +1,12 @@
+function normalizeString(str) {
+  return str
+    .toLowerCase() // Convertir en minuscules
+    .normalize("NFD") // Décomposer les caractères accentués
+    .replace(/[\u0300-\u036f]/g, "") // Supprimer les accents
+    .replace(/\s+/g, " ") // Remplacer les espaces multiples par un seul espace
+    .trim(); // Supprimer les espaces au début et à la fin
+}
+
 class RecipeModel {
   constructor(data) {
     this.data = data; // Stocker les données de la recette
@@ -7,19 +16,19 @@ class RecipeModel {
   // Méthode pour rechercher des recettes en fonction d'un critère de recherche
   searchRecipes(query) {
     //La requête query est convertie en minuscules pour permettre une recherche insensible à la casse.
-    const normalizedQuery = query.toLowerCase();
+    const normalizedQuery = normalizeString(query);
     //Utilisation de la méthode filter pour créer un nouveau tableau filteredRecipes contenant uniquement les recettes qui correspondent à la requête. La méthode filter parcourt chaque élément de this.data et applique une fonction de filtrage.
     this.filteredRecipes = this.data.filter((recipe) => {
       //Pour chaque recipe, la fonction de filtrage vérifie trois conditions : nom de la recette, les ingrédients et la description
       return (
         //Si le nom de la recette contient la requête normalisée, cette condition est true.
-        recipe.name.toLowerCase().includes(normalizedQuery) ||
+        normalizeString(recipe.name).includes(normalizedQuery) ||
         //Utilisation de la méthode some pour vérifier si au moins un des ingrédients contient la requête. Si un ingrédient correspond, cette condition est true.
         recipe.ingredients.some((ingredient) =>
-          ingredient.ingredient.toLowerCase().includes(normalizedQuery)
+          normalizeString(ingredient.ingredient).includes(normalizedQuery)
         ) ||
         //Si la description de la recette contient la requête normalisée, cette condition est true.
-        recipe.description.toLowerCase().includes(normalizedQuery)
+        normalizeString(recipe.description).includes(normalizedQuery)
         //Si au moins une de ces conditions est remplie, la fonction de filtrage retourne true, ce qui inclut la recette dans le tableau filtré.
       );
     });
