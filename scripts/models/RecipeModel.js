@@ -39,7 +39,7 @@ class RecipeModel {
   // La fonction searchRecipes permet de filtrer des recettes en fonction d'une requête utilisateur en vérifiant si cette requête est présente dans le nom de la recette, ses ingrédients ou sa description. La recherche est insensible à la casse et s'arrête dès qu'un critère est rempli pour une recette donnée.
   searchRecipes(query) {
     //convertit la requête en minuscule
-    const normalizedQuery = query.toLowerCase();
+    const normalizedQuery = normalizeString(query);
     // un tableau est initialisé pour stocker les recettes qui correspondent à la requête
     let filteredRecipes = [];
 
@@ -49,7 +49,7 @@ class RecipeModel {
       let isMatch = false;
 
       // Vérifier si le nom de la recette contient la requête, isMatch passe à true
-      if (recipe.name.toLowerCase().includes(normalizedQuery)) {
+      if (normalizeString(recipe.name).includes(normalizedQuery)) {
         isMatch = true;
       }
 
@@ -57,7 +57,9 @@ class RecipeModel {
       if (!isMatch) {
         for (let j = 0; j < recipe.ingredients.length; j++) {
           const ingredient = recipe.ingredients[j];
-          if (ingredient.ingredient.toLowerCase().includes(normalizedQuery)) {
+          if (
+            normalizeString(ingredient.ingredient).includes(normalizedQuery)
+          ) {
             isMatch = true;
             break; // Arrêter la boucle dès qu'on trouve un ingrédient correspondant
           }
@@ -67,7 +69,7 @@ class RecipeModel {
       // Si isMatch est encore false, la description de la recette est vérifiée. Si elle contient la requête, isMatch est mis à true.
       if (
         !isMatch &&
-        recipe.description.toLowerCase().includes(normalizedQuery)
+        normalizeString(recipe.description).includes(normalizedQuery)
       ) {
         isMatch = true;
       }
