@@ -177,7 +177,7 @@ class RecipeController {
     // Cette valeur est stockée dans la variable query.
     const query = event.target.value;
     // Condition sur la Longueur de la Chaîne
-    if (query.length > 3 || query.length === 0) {
+    if (query.length >= 3 || query.length === 0) {
       //Recherche des Recettes
       const recipes = this.model.searchRecipes(query);
       //Mise à Jour des résultats
