@@ -151,9 +151,10 @@ button {
   padding-right: 16px;
   padding-left: 16px;
   width: 163px;
-  &:hover {
-    background-color: #ffd15b;
-  }
+}
+
+.dropdown:hover {
+  background-color: #ffd15b;
 }
 
 .dropdown_content {
